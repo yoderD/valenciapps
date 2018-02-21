@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Ventas</title>
+    </h:head>
+    <h:body>
+        <p:messages id="messages" showDetail="true" closable="true">
+
+        </p:messages>
+
+
+        <h:form id="formClientes">
+            <div id="div_clientes">Generacion Compra</div> 
+            <p:panelGrid id="gridVenta">
+
+                <p:row>
+                    <p:column style="width: 25%">
+                        <p:outputLabel value="Producto" for="producto"/>
+                    </p:column>
+                    <p:column style="width: 25%">
+                        <p:selectOneMenu id="producto" value="#{ventaControlador.dtoCompra.idProducto}" 
+                                         filterMatchMode="contains" filter="true"  >
+                            <f:selectItem itemLabel="selecione" itemValue="-1"/>
+                            <f:selectItems value="#{ventaControlador.productosDtos}"  var="p"  itemLabel="#{p.nombreRegistro}" 
+                                           itemValue="#{p.idProducto}"/>
+                            <p:ajax event="change" listener="#{ventaControlador.generarPrecio()}" update="@all"/>
+                        </p:selectOneMenu>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column style="width: 25%">
+                        <p:outputLabel value="Precio" for="precio"/>
+                    </p:column>
+                    <p:column style="width: 25%">
+                        <p:inputText id="precio" disabled="true" value="#{ventaControlador.dtoCompra.precio}" >
+                            <f:convertNumber currencySymbol="$" integerOnly="true" type="currency" maxFractionDigits="0" />
+                        </p:inputText>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column style="width: 25%">
+                        <p:outputLabel value="Cantidad" for="cantidad"/>
+                    </p:column>
+                    <p:column style="width: 25%">
+                        <p:inputText id="cantidad"  value="#{ventaControlador.dtoCompra.cantidad}">
+                            <p:ajax event="blur" listener="#{ventaControlador.generarCostos()}" update="@all" immediate="true"/>
+                            <p:ajax event="keyup"/>
+                        </p:inputText>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column style="width: 25%">
+                        <p:outputLabel value="Impuesto" for="impuesto"/>
+                    </p:column>
+                    <p:column style="width: 25%">
+                        <p:inputText id="impuesto" disabled="true" value="#{ventaControlador.dtoCompra.impuesto}">
+                            <f:convertNumber currencySymbol="$" integerOnly="true" type="currency" maxFractionDigits="2" />
+                        </p:inputText>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column style="width: 25%">
+                        <p:outputLabel value="Sub-Total" for="suttl"/>
+                    </p:column>
+                    <p:column style="width: 25%">
+                        <p:inputText id="suttl" disabled="true" value="#{ventaControlador.dtoCompra.subTotal}">
+                            <f:convertNumber currencySymbol="$" integerOnly="true" type="currency" maxFractionDigits="2" />
+                        </p:inputText> 
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column style="width: 25%">
+                        <p:outputLabel value="Total" for="total"/>
+                    </p:column>
+                    <p:column style="width: 25%">
+                        <p:inputText id="total" disabled="true" value="#{ventaControlador.dtoCompra.total}">
+                            <f:convertNumber currencySymbol="$" integerOnly="true" type="currency" maxFractionDigits="2" />
+                        </p:inputText>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column style="width: 25%" colspan="2">
+                        <p:commandButton value="Agregar" action="#{ventaControlador.agregarCompra()}" update="@([id$dtProducto])"/>
+                    </p:column>
+                </p:row>
+
+            </p:panelGrid>
+            <br/><br/>
+
+
+            <p:dataTable id="dtProducto" value="#{ventaControlador.listaCompraCliente}" var="lc" 
+                         emptyMessage="No hay productos." rows="50" paginator="true"
+                         paginatorPosition="bottom" lazy="true">
+                <p:column headerText="Nombre Producto" >
+                    <h:outputText  value="#{lc.nombreRegistro}"/>
+                </p:column>
+                <p:column headerText="Cantidad" >
+                    <h:outputText  value="#{lc.cantidad}"/>
+                </p:column>
+                <p:column headerText="Impuesto" >
+                    <h:outputText  value="#{lc.impuesto}">
+                        <f:convertNumber currencySymbol="$" integerOnly="true" type="currency" maxFractionDigits="2" />
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Sub-Total" >
+                    <h:outputText  value="#{lc.subTotal}">
+                        <f:convertNumber currencySymbol="$" integerOnly="true" type="currency" maxFractionDigits="2" />
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Total" >
+                    <h:outputText  value="#{lc.total}">
+                        <f:convertNumber currencySymbol="$" integerOnly="true" type="currency" maxFractionDigits="2" />
+                    </h:outputText>
+                </p:column>
+            </p:dataTable>
+
+            <p:panelGrid style="width: 100%;">
+                <f:facet name="footer">
+                    <p:row>
+                        <p:column style="text-align: center">
+                            <p:commandButton id="guardar" 
+                                             actionListener="#{ventaControlador.generarDesceuntoInventario()}"
+                                             value="Crear Venta"
+                                             update="@all"
+                                             onstart="mensajeCargando.show();" 
+                                             oncomplete="mensajeCargando.hide();"
+                                             />
+                        </p:column>
+                    </p:row>
+                </f:facet>
+            </p:panelGrid>
+
+        </h:form>
+
+
+
+
+    </h:body>
+</html>
+

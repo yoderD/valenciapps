@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Productos</title>
+    </h:head>
+    <h:body>
+        <p:messages id="messages" showDetail="true" closable="true">
+
+        </p:messages>
+
+
+        <h:form id="formClientes">
+            <div id="div_clientes">Productos Registrados</div> 
+            <p:commandButton value="Crear Producto" onclick="PF('dlgProducto').show()"></p:commandButton>
+            <p:dataTable id="data" value="#{productoControlador.listaProductos}" var="cl"
+                         emptyMessage="No se encontraron registros." rows="50" paginator="true"
+                         paginatorPosition="bottom" lazy="true"> 
+                <p:column headerText="Nombre Producto" >
+                    <h:outputText  value="#{cl.nombreRegistro}"/>
+                </p:column>
+                <p:column headerText="Cantidad" >
+                    <h:outputText  value="#{cl.cantidad}"/>
+                </p:column>
+
+                <p:column headerText="Precio" >
+                    <h:outputText  value="#{cl.precio}">
+                        <f:convertNumber currencySymbol="$" integerOnly="true" type="currency" maxFractionDigits="0" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Monto" >
+                    <h:outputText  value="#{cl.monto}">
+                        <f:convertNumber currencySymbol="$" integerOnly="true" type="currency" maxFractionDigits="0" />
+                    </h:outputText>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <p:dialog id="crearUsuario" widgetVar="dlgProducto" position="top" style="margin-top: 250px" closable="false"
+                  header="Crear Producto">
+            <h:form id="dlgProductoFrm">
+                <p:panelGrid id="panel">
+                    <p:row>
+                        <p:column style="width: 25%">
+                            <p:outputLabel value="Nombre Producto" for="producto"/>
+                        </p:column>
+                        <p:column style="width: 25%">
+                            <p:inputText id="producto" value="#{productoControlador.dtoProducto.nombreRegistro}" required="true" validatorMessage="Ingrese un nombre al producto."/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column style="width: 25%">
+                            <p:outputLabel value="Cantidad" for="cantidad"/>
+                        </p:column>
+                        <p:column style="width: 25%">
+                            <p:inputText id="cantidad" value="#{productoControlador.dtoProducto.cantidad}" required="true" validatorMessage="Ingrese una cantidad al producto."/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column style="width: 25%">
+                            <p:outputLabel value="Precio Producto" for="precio"/>
+                        </p:column>
+
+                        <p:column style="width: 25%">
+                            <p:inputText id="precio" value="#{productoControlador.dtoProducto.precio}" required="true" validatorMessage="Ingrese un precio al producto."/>
+                        </p:column>
+                    </p:row>
+
+                </p:panelGrid>
+                <br/><br/>
+                <p:panelGrid style="width: 100%;">
+                    <f:facet name="footer">
+                        <p:row>
+                            <p:column style="text-align: center">
+                                <p:commandButton id="guardar" 
+                                                 actionListener="#{productoControlador.crearProducto()}"
+                                                 value="crear" oncomplete="PF('dlgProducto').hide()"
+                                                 update="@([id$formClientes])"/>
+                                <p:commandButton id="decline" value="Cancelar" onclick="PF('dlgProducto').hide()"/>
+                            </p:column>
+                        </p:row>
+                    </f:facet>
+                </p:panelGrid>    
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>
+

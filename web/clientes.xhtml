@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Clientes</title>
+    </h:head>
+    <h:body>
+        <p:messages id="messages" showDetail="true" closable="true">
+
+        </p:messages>
+
+
+        <h:form id="formClientes">
+            <div id="div_clientes">Clientes Registrados</div> 
+            <p:commandButton value="Crear Usuario" onclick="PF('dlgUsuario').show()"></p:commandButton>
+            <p:dataTable id="data" value="#{clienteControlador.listClientes}" var="cl"
+                         emptyMessage="No se encontraron registros." rows="50" paginator="true"
+                         paginatorPosition="bottom" lazy="true"> 
+                <p:column headerText="Nombre Cliente" >
+                    <h:outputText  value="#{cl.nombreRegistro}"/>
+                </p:column>
+                <p:column headerText="Apciones">
+                    <p:commandButton value="Eliminar" action="#{clienteControlador.eliminar(cl)}" update="@([id$data])" />
+                    <p:commandButton value="Editar" action="#{clienteControlador.clienteControlador(cl)}" update="@([id$crearUsuario])"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <p:dialog id="crearUsuario" widgetVar="dlgUsuario" position="top" style="margin-top: 250px" closable="false"
+                  header="Crear - Editar Cliente">
+            <h:form id="dlgUsuarioFrm">
+                <p:panelGrid id="panel">
+                    <p:row>
+                        <p:column style="width: 25%">
+                            <p:outputLabel value="Nombre Cliente" for="cliente"/>
+                        </p:column>
+                        <p:column style="width: 25%">
+                            <p:inputText id="cliente" value="#{clienteControlador.dto.nombreRegistro}" required="true" validatorMessage="Ingrese un nombre de cliente."/>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <br/><br/>
+                <p:panelGrid style="width: 100%;">
+                    <f:facet name="footer">
+                        <p:row>
+                            <p:column style="text-align: center">
+                                <p:commandButton id="guardar" 
+                                                 actionListener="#{clienteControlador.crearEditar()}"
+                                                 value="crear" oncomplete="PF('dlgUsuario').hide()"
+                                                 update="@([id$formClientes])"/>
+                                <p:commandButton id="decline" value="Cancelar" onclick="PF('dlgUsuario').hide()"/>
+                            </p:column>
+                        </p:row>
+                    </f:facet>
+                </p:panelGrid>    
+
+
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>
+

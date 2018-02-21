@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/home/esneider/NetBeansProjects/valenciapps/web/productos.xhtml</file>
+            <file>file:/home/esneider/NetBeansProjects/valenciapps/web/venta.xhtml</file>
+            <file>file:/home/esneider/NetBeansProjects/valenciapps/src/java/co/valenciaapps/controlador/VentaControlador.java</file>
+            <file>file:/home/esneider/NetBeansProjects/valenciapps/src/java/co/valenciaapps/entidades/Producto.java</file>
+            <file>file:/home/esneider/NetBeansProjects/valenciapps/src/java/co/valenciaapps/facades/ProductoFacade.java</file>
+            <file>file:/home/esneider/NetBeansProjects/valenciapps/src/java/co/valenciaapps/controlador/LoginController.java</file>
+            <file>file:/home/esneider/NetBeansProjects/valenciapps/src/java/co/valenciaapps/facades/AbstractFacade.java</file>
+            <file>file:/home/esneider/NetBeansProjects/valenciapps/src/java/co/valenciaapps/facades/ClienteFacade.java</file>
+            <file>file:/home/esneider/NetBeansProjects/valenciapps/src/java/co/valenciaapps/entidades/Cliente.java</file>
+            <file>file:/home/esneider/NetBeansProjects/valenciapps/src/java/co/valenciaapps/controlador/ProductoControlador.java</file>
+            <file>file:/home/esneider/NetBeansProjects/valenciapps/web/index.xhtml</file>
+            <file>file:/home/esneider/NetBeansProjects/valenciapps/src/java/co/valenciaapps/facades/VentaFacade.java</file>
+        </group>
+    </open-files>
+</project-private>
