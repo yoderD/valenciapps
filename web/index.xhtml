@@ -5,37 +5,28 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Admin</title>
+        <title>Inicio</title>
     </h:head>
     <h:body>
+        <p:messages id="messages" showDetail="true" closable="true"/>
 
         <h:form id="formNavegacion">
-            <p:panelGrid id="grid" style="text-align: center;">
-                <f:facet name="header">
-                    <p:row>
-                        <p:column style="text-align: center; width: 25%">Modulo</p:column>
-                        <p:column style="text-align: center; width: 60%">Descripcion</p:column>
-                        <p:column style="text-align: center; width: 15%">Apcion</p:column>
-                    </p:row>
-                </f:facet>
-                <p:row>
-                    <p:column style="text-align: left">Clientes</p:column>
-                    <p:column style="text-align: center">administracion de clientes</p:column>
-                    <p:column style="text-align: center"><p:commandButton value="ir" action="#{clienteControlador.redireccionarURL('faces/clientes.xhtml')}" tabindex="1"/></p:column>
-                </p:row>
-                <p:row>
-                    <p:column style="text-align: left">Producto</p:column>
-                    <p:column style="text-align: center">administracion de productos</p:column>
-                    <p:column style="text-align: center"><p:commandButton value="ir" action="#{productoControlador.redireccionarURL('faces/productos.xhtml')}" tabindex="2"/></p:column>
-                </p:row>
-
-                <p:row>
-                    <p:column style="text-align: left">Ventas</p:column>
-                    <p:column style="text-align: center">Gestion de ventas</p:column>
-                    <p:column style="text-align: center"><p:commandButton value="ir" action="#{productoControlador.redireccionarURL('faces/venta.xhtml')}" tabindex="3"/></p:column>
-                </p:row>
-
-            </p:panelGrid>
+            <p:panel header="Login" style="width:350px;text-align: center;">
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputLabel for="username" value="Usuario:" />
+                    <p:inputText value="#{loginController.usuario}" id="username"
+                                 required="true" label="usuario" />
+                    <h:outputLabel for="password" value="Clave:" />
+                    <p:password value="#{loginController.pass}" id="password" required="true"
+                                label="clave" />
+                    <f:facet name="footer">
+                        <p:commandButton style="text-align: center" id="loginButton" value="Login"
+                                         action="#{loginController.login()}" update="@all"
+                                         />
+                    </f:facet>
+                </h:panelGrid>
+            </p:panel>
+            <!-- oncomplete="manejarLogin(xhr, status, args)" -->
         </h:form>
 
     </h:body>

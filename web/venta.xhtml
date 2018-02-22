@@ -8,15 +8,22 @@
         <title>Ventas</title>
     </h:head>
     <h:body>
-        <p:messages id="messages" showDetail="true" closable="true">
-
-        </p:messages>
+        <p:messages id="messages" showDetail="true" closable="true"/>
 
 
         <h:form id="formClientes">
+
+            <div id="user" style="text-align:right;">               
+                <h:outputText style="color: background;">#{ventaControlador.usuarioLogeado}</h:outputText>
+                <br/>
+                <p:commandLink id="btnEspecialidad" value="Cerrar Sesion"  style="color: blue"
+                               action="#{loginController.logout()}">
+                </p:commandLink>
+            </div> 
+            <br/>          
+
             <div id="div_clientes">Generacion Compra</div> 
             <p:panelGrid id="gridVenta">
-
                 <p:row>
                     <p:column style="width: 25%">
                         <p:outputLabel value="Producto" for="producto"/>
@@ -139,6 +146,13 @@
                     </p:row>
                 </f:facet>
             </p:panelGrid>
+
+            <br/><br/>  
+            <div id="barra_inferior_botones" style="text-align: center;">               
+             <p:commandButton actionListener="#{clienteControlador.redireccionarURL('../faces/nav.xhtml')}" 
+                                 value="Regresar" /> 
+            </div>
+
 
         </h:form>
 

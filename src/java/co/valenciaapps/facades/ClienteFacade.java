@@ -68,10 +68,11 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
         return cdto;
     }
 
-    public void actualizar(GeneralDto o) {
+    public Cliente actualizar(GeneralDto o) {
         Cliente cliente = find(o.getIdEntidad());
         cliente.setNombreCliente(o.getNombreRegistro().toUpperCase());
         em.merge(cliente);
+        return cliente;
     }
 
     public void eliminar(GeneralDto o) {
@@ -81,7 +82,7 @@ public class ClienteFacade extends AbstractFacade<Cliente> {
 
     public Cliente login(String usaurio, String pass) {
         final TypedQuery<Cliente> q = em.createNamedQuery("Cliente.findUsuario", Cliente.class);
-        q.setParameter("nombre", usaurio);
+        q.setParameter("nombre", usaurio.toUpperCase());
         q.setParameter("pass", pass);
         return q.getResultList().size() > 0 ? q.getResultList().get(0) : null;
     }

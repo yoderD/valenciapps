@@ -8,12 +8,18 @@
         <title>Productos</title>
     </h:head>
     <h:body>
-        <p:messages id="messages" showDetail="true" closable="true">
-
-        </p:messages>
+        <p:messages id="messages" showDetail="true" closable="true"/>
 
 
         <h:form id="formClientes">
+            <div id="user" style="text-align:right;">               
+                <h:outputText style="color: black;" value="#{clienteControlador.usuarioLogeado}"/><br/>
+                <p:commandLink id="btnEspecialidad" value="Cerrar Sesion"  style="color: blue"
+                               action="#{loginController.logout()}">
+                </p:commandLink>
+            </div> 
+            <br/>
+
             <div id="div_clientes">Productos Registrados</div> 
             <p:commandButton value="Crear Producto" onclick="PF('dlgProducto').show()"></p:commandButton>
             <p:dataTable id="data" value="#{productoControlador.listaProductos}" var="cl"
@@ -38,6 +44,13 @@
                     </h:outputText>
                 </p:column>
             </p:dataTable>
+
+            <br/><br/>  
+            <div id="barra_inferior_botones" style="text-align: center;">               
+                <p:commandButton actionListener="#{clienteControlador.redireccionarURL('../faces/nav.xhtml')}" 
+                                 value="Regresar" /> 
+            </div>
+
         </h:form>
 
         <p:dialog id="crearUsuario" widgetVar="dlgProducto" position="top" style="margin-top: 250px" closable="false"

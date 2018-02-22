@@ -1,17 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package co.valenciaapps.controlador;
 
+import co.valenciaapps.comun.Utilidad;
 import co.valenciaapps.dto.GeneralDto;
 import co.valenciaapps.entidades.Producto;
 import co.valenciaapps.facades.ProductoFacade;
 import co.valenciaapps.facades.VentaFacade;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +36,9 @@ public class VentaControlador implements Serializable {
     private Long idProducto;
     private Integer cantidad;
     private BigDecimal precio;
+    private long clienteId;
+    private String usuarioLogeado;
+    private boolean entro;
 
     /**
      * Creates a new instance of VentaControlador
@@ -50,6 +48,9 @@ public class VentaControlador implements Serializable {
 
     @PostConstruct
     public void postConstruct() {
+        entro = false;
+        clienteId = Utilidad.clienteSessionId();
+        usuarioLogeado = Utilidad.clienteSessionNombre();
         dtoCompra = new GeneralDto();
         precio = BigDecimal.ZERO;
         cantidad = 0;
@@ -63,6 +64,7 @@ public class VentaControlador implements Serializable {
         dtoCompra.setPrecio(find.getPrecio());
         dtoCompra.setIdProducto(find.getIdProducto());
         dtoCompra.setNombreRegistro(find.getNombreProducto());
+        dtoCompra.setIdCliente(clienteId);
     }
 
     public void generarCostos() {
@@ -81,16 +83,19 @@ public class VentaControlador implements Serializable {
             if (dto.getIdProducto().equals(dtoCompra.getIdProducto())) {
                 dtoCompra.setCantidad(dtoCompra.getCantidad() + dto.getCantidad());
                 generarCostos();
+                entro = true;
                 break;
             }
             pox++;
         }
+        pox = entro ? pox : 0;
         return pox;
     }
 
     public void generarDesceuntoInventario() {
         try {
             ventaFacade.generarRegistros(listaCompraCliente);
+            postConstruct();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Registros creados satisfactoriamente."));
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", e.getMessage()));
@@ -98,12 +103,25 @@ public class VentaControlador implements Serializable {
     }
 
     public void agregarCompra() {
+        entro = false;
         int index = validarProducto();
-        if (listaCompraCliente.size() > 0) {
+        if (entro) {
             listaCompraCliente.remove(listaCompraCliente.get(index));
         }
         listaCompraCliente.add(dtoCompra);
         dtoCompra = new GeneralDto();
+    }
+
+    public void redireccionarURL(String URL) {
+        if (!Utilidad.clienteSessionValidarNombre()) {
+            Utilidad.redireccionar(URL);
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "", "Usted no tiene permiso para acceder a este modulo."));
+        }
+    }
+
+    public void URL(String URL) {
+        Utilidad.redireccionar(URL);
     }
 
     public List<GeneralDto> getProductosDtos() {
@@ -152,5 +170,13 @@ public class VentaControlador implements Serializable {
 
     public void setPrecio(BigDecimal precio) {
         this.precio = precio;
+    }
+
+    public String getUsuarioLogeado() {
+        return usuarioLogeado;
+    }
+
+    public void setUsuarioLogeado(String usuarioLogeado) {
+        this.usuarioLogeado = usuarioLogeado;
     }
 }

@@ -1,8 +1,8 @@
 package co.valenciaapps.controlador;
 
+import co.valenciaapps.comun.Utilidad;
 import co.valenciaapps.entidades.Cliente;
 import co.valenciaapps.facades.ClienteFacade;
-import java.awt.event.ActionEvent;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -11,7 +11,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.servlet.http.HttpSession;
-import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -35,22 +34,23 @@ public class LoginController implements Serializable {
         pass = "";
     }
 
-    public void login(ActionEvent actionEvent) {
+    public void login() {
         final Cliente cliente = clienteFacade.login(usuario, pass);
-        FacesMessage fm = null;
         if (cliente != null) {
             logeado = true;
-            HttpSession variableHttp = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-            variableHttp.setAttribute("cleinteSession", cliente);
+            //usuarioLogeado = cliente.getNombreCliente();
+            Utilidad.crearSesion(cliente);
+            Utilidad.redireccionar("faces/nav.xhtml");
         } else {
-            fm = new FacesMessage(FacesMessage.SEVERITY_WARN, "Login Error", "Credenciales no validas.");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Login Error", "Credenciales no validas."));
         }
     }
 
-    public void logot() {
+    public void logout() {
         HttpSession variableHttp = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-        variableHttp.setAttribute("cleinteSession", null);
+        variableHttp.removeAttribute("clienteSession");
         variableHttp.invalidate();
+        Utilidad.redireccionar("/valenciapps");
         logeado = false;
     }
 

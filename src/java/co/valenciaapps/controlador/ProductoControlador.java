@@ -19,7 +19,7 @@ import javax.faces.view.ViewScoped;
  */
 @Named(value = "productoControlador")
 @ViewScoped
-public class ProductoControlador implements Serializable{
+public class ProductoControlador implements Serializable {
 
     @EJB
     private ProductoFacade productoFacade;

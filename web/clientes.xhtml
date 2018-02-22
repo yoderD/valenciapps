@@ -8,12 +8,20 @@
         <title>Clientes</title>
     </h:head>
     <h:body>
-        <p:messages id="messages" showDetail="true" closable="true">
-
-        </p:messages>
+        <p:messages id="messages" showDetail="true" closable="true"/>
 
 
         <h:form id="formClientes">
+
+            <div id="user" style="text-align:right;">               
+                <h:outputText style="color: black;" value="#{clienteControlador.usuarioLogeado}"/><br/>
+                <p:commandLink id="btnEspecialidad" value="Cerrar Sesion"  style="color: blue"
+                               action="#{loginController.logout()}">
+                </p:commandLink>
+            </div> 
+            <br/>
+
+
             <div id="div_clientes">Clientes Registrados</div> 
             <p:commandButton value="Crear Usuario" onclick="PF('dlgUsuario').show()"></p:commandButton>
             <p:dataTable id="data" value="#{clienteControlador.listClientes}" var="cl"
@@ -27,6 +35,12 @@
                     <p:commandButton value="Editar" action="#{clienteControlador.clienteControlador(cl)}" update="@([id$crearUsuario])"/>
                 </p:column>
             </p:dataTable>
+
+            <br/><br/>  
+            <div id="barra_inferior_botones" style="text-align: center;">               
+                <p:commandButton actionListener="#{clienteControlador.redireccionarURL('../faces/nav.xhtml')}" 
+                                 value="Regresar" /> 
+            </div>
         </h:form>
 
         <p:dialog id="crearUsuario" widgetVar="dlgUsuario" position="top" style="margin-top: 250px" closable="false"
@@ -49,15 +63,13 @@
                             <p:column style="text-align: center">
                                 <p:commandButton id="guardar" 
                                                  actionListener="#{clienteControlador.crearEditar()}"
-                                                 value="crear" oncomplete="PF('dlgUsuario').hide()"
+                                                 value="Crear" oncomplete="PF('dlgUsuario').hide()"
                                                  update="@([id$formClientes])"/>
                                 <p:commandButton id="decline" value="Cancelar" onclick="PF('dlgUsuario').hide()"/>
                             </p:column>
                         </p:row>
                     </f:facet>
                 </p:panelGrid>    
-
-
             </h:form>
         </p:dialog>
     </h:body>

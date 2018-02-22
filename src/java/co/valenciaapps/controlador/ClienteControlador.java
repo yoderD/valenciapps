@@ -2,6 +2,7 @@ package co.valenciaapps.controlador;
 
 import co.valenciaapps.comun.Utilidad;
 import co.valenciaapps.dto.GeneralDto;
+import co.valenciaapps.entidades.Cliente;
 import co.valenciaapps.facades.ClienteFacade;
 import co.valenciaapps.services.ValenciaAppsException;
 import java.io.Serializable;
@@ -28,9 +29,14 @@ public class ClienteControlador implements Serializable {
     private List<GeneralDto> listClientes;
     private String nombreCliente;
     private GeneralDto dto;
+    private long clienteId;
+    private long clienteEdicion = 0;
+    private String usuarioLogeado;
 
     @PostConstruct
     public void postConstruct() {
+        clienteId = Utilidad.clienteSessionId();
+        usuarioLogeado = Utilidad.clienteSessionNombre();
         nombreCliente = "";
         dto = new GeneralDto();
         listClientes = clienteFacade.getClientes();
@@ -38,13 +44,14 @@ public class ClienteControlador implements Serializable {
 
     public void clienteControlador(GeneralDto cliente) {
         dto = cliente;
+        clienteEdicion = cliente.getIdEntidad();
         RequestContext.getCurrentInstance().execute("PF('dlgUsuario').show()");
     }
 
-     public void redireccionarURL(String URL) {
+    public void redireccionarURL(String URL) {
         Utilidad.redireccionar(URL);
     }
-    
+
     public void eliminar(GeneralDto cliente) {
         try {
             clienteFacade.eliminar(cliente);
@@ -59,17 +66,20 @@ public class ClienteControlador implements Serializable {
         try {
             if (dto.getIdEntidad() == null) {
                 clienteFacade.registrar(dto);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "i", "Cliente Creado Satisfactoriamente."));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Cliente Creado Satisfactoriamente."));
             } else {
-                clienteFacade.actualizar(dto);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "i", "Cliente Actializado Satisfactoriamente."));
+                final Cliente cliente = clienteFacade.actualizar(dto);
+                if (clienteEdicion == clienteId) {
+                    Utilidad.crearSesion(cliente);
+                }
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Cliente Actializado Satisfactoriamente."));
             }
             postConstruct();
         } catch (ValenciaAppsException e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "i", e.getMessage()));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", e.getMessage()));
         } catch (Exception e) {
             e.printStackTrace();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "i", "Error"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Error"));
         }
     }
 
@@ -97,4 +107,11 @@ public class ClienteControlador implements Serializable {
         this.dto = dto;
     }
 
+    public String getUsuarioLogeado() {
+        return usuarioLogeado;
+    }
+
+    public void setUsuarioLogeado(String usuarioLogeado) {
+        this.usuarioLogeado = usuarioLogeado;
+    }
 }
